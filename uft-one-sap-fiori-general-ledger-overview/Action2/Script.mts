@@ -201,6 +201,7 @@ DeselectCard "Journal Entries to Be Verified"
 'BP:  Navigate to G/L Account Balance.
 '		Choose the header (or line point) of the card to get further information.
 '===========================================================================================
+SelectCard "G/L Account Balance"
 AIUtil.FindText("G/L Account Balance").Click
 AIUtil.FindText("Balance Sheet/Income Statement").CheckExists True
 
@@ -208,6 +209,7 @@ AIUtil.FindText("Balance Sheet/Income Statement").CheckExists True
 'BP:  If you click on a line item, you are directly navigated to the selected account group.
 '===========================================================================================
 AIUtil("left_triangle").Click
+DeselectCard "G/L Account Balance"
 
 '===========================================================================================
 'BP:  Navigate to Quick Links.
@@ -218,25 +220,31 @@ AIUtil("left_triangle").Click
 '		• Post Cash Journal Entries
 '		• Clear G/L Accounts
 '===========================================================================================
+SelectCard "Quick Links"
 AIUtil.FindTextBlock("Display G/L Account Line Items").Click
 AIUtil.FindTextBlock("Display Line Items in General Ledger").CheckExists True
 AIUtil("left_triangle").Click
+DeselectCard "Quick Links"
 
 '===========================================================================================
 'BP:  Navigate to Tax Reconciliation Account Balance.
 '		Choose the line item of the card to get further information.
 '===========================================================================================
+SelectCard "Tax Reconciliation Account Balance"
 AIUtil.FindTextBlock("Tax Reconciliation Account Balance").Click
 AIUtil.FindTextBlock("Tax Reconciliation Account Balance").CheckExists True
 AIUtil("left_triangle").Click
+DeselectCard "Tax Reconciliation Account Balance"
 
 '===========================================================================================
 'BP:  Navigate to G/L Items Changes.
 '		Choose the header (or line point) of the card to get further information.
 '===========================================================================================
+SelectCard "G/L Item Changes"
 AIUtil.FindTextBlock("GIL Item Changes").Click
 AIUtil.FindText("Audit Journal").CheckExists True
 AIUtil("left_triangle").Click
+DeselectCard "G/L Item Changes"
 
 '===========================================================================================
 'BP:  Navigate to Days Payable Outstanding Indirect.
