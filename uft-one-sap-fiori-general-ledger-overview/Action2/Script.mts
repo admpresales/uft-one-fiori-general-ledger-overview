@@ -223,7 +223,11 @@ DeselectCard "G/L Account Balance"
 SelectCard "Quick Links"
 AIUtil.FindTextBlock("Display G/L Account Line Items").Click
 AIUtil.FindTextBlock("Display Line Items in General Ledger").CheckExists True
-AIUtil("left_triangle").Click
+If AIUtil("left_triangle").Exist(0) Then
+	AIUtil("left_triangle").Click
+else
+	AIUtil("left_triangle", micAnyText, micFromTop, 1).Click
+End If
 DeselectCard "Quick Links"
 
 '===========================================================================================
@@ -273,7 +277,4 @@ AIWaitForExist Object
 
 AppContext.Close																			'Close the application at the end of your script
 
-
-
-AIUtil.SetContext Browser("creationtime:=0")
 
