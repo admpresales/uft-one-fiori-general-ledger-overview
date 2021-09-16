@@ -50,36 +50,7 @@ Function SelectCard (Card)
 	'===========================================================================================
 	'BP:  Set your preferences and choose OK.
 	'===========================================================================================
-'	If AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).Exist(2) = False Then
-'		AIUtil.ScrollOnObject AIUtil("toggle_button", micAnyText, micFromTop, 1), "down", 2
-'	End If
-'	
-'	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).SetState "On"
-'	If AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).Exist(2) = False Then
-'		AIUtil.ScrollOnObject AIUtil("toggle_button", micAnyText, micFromTop, 1), "down", 2
-'	End If
-'	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).CheckState "On"
 	Browser("Home").Page("Home").SAPUIButton("Card Switch").Click
-	'For i = 1 To 8 Step 1
-	'	AIUtil("toggle_button", micAnyText, micFromTop,i).SetState "On"
-	'	AIUtil("toggle_button", micAnyText, micFromTop,i).CheckState "On"
-	'Next
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Recognized Cost of Sales", micFromTop, 1)).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Recognized Cost of Sales", micFromTop, 1)).CheckState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Journal Entries to Be Verified")).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Journal Entries to Be Verified")).CheckState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("My Inbox")).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("My Inbox")).CheckState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Tax Reconciliation Account Balance")).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Tax Reconciliation Account Balance")).CheckState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Recognized Revenue", micFromTop, 1)).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Recognized Revenue", micFromTop, 1)).CheckState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Days Sales Outstanding")).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Days Sales Outstanding")).CheckState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Days Payable Outstanding Indirect")).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("Days Payable Outstanding Indirect")).CheckState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("G/L Item Changes")).SetState "On"
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock("G/L Item Changes")).CheckState "On"
 	AIUtil("button", "OK").Click
 	
 End Function
@@ -99,11 +70,8 @@ Function DeselectCard (Card)
 	'===========================================================================================
 	'BP:  Set your preferences and choose OK.
 	'===========================================================================================
-	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindText(Card)).SetState "Off"
 	DataTable.Value("dtCard","Global") = Card
-'	Browser("Home").Page("Home").SAPUIButton("Card Switch").Click
 	AIUtil("toggle_button", micAnyText, micFromTop, 1).SetState "Off"	
-'	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindText(Card, micFromTop, 1)).CheckState "Off"
 	AIUtil("button", "OK").Click
 	
 End Function
@@ -200,17 +168,11 @@ If  (AIUtil("button", "Go").Exist(10) = False) Then
 		Loop Until AIUtil("button", "Go").Exist(0)
 End If
 
-'AIUtil("text_box", "Display Currency: *").Type "USD"
 Browser("Home").Page("Home").WebEdit("Display Currency_2").Set "USD"
-'AIUtil("text_box", "Key Date: *").Type CurrentDate
 Browser("Home").Page("Home").WebEdit("Key Date").Set CurrentDate
-'AIUtil("text_box", "Planning Category: *").Type "PLN"
 Browser("Home").Page("Home").WebEdit("Planning Category").Set "PLN"
-'AIUtil("text_box", "Statement Version: *").Type "YCOA"
 Browser("Home").Page("Home").WebEdit("Statement Version").Set "YCOA"
-'AIUtil("text_box", "Ledger: *").Type "0L"
 Browser("Home").Page("Home").WebEdit("Ledger_2").Set "0L"
-'AIUtil("text_box", "Company Code:*").Type "1710"
 Browser("Home").Page("Home").WebEdit("Company Code_2").Set "1710"
 AIUtil("button", "Go").Click
 
