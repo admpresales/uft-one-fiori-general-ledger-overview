@@ -39,14 +39,27 @@ Function SelectCard (Card)
 	'===========================================================================================
 	'BP:  To customize the cards on the overview page, choose the User Icon and choose Manage Cards.
 	'===========================================================================================
+	Set Object = AIUtil("profile")
+	AIWaitForExist Object
 	AIUtil("profile").Click
+	Set Object = AIUtil.FindTextBlock("Manage Cards")
+	AIWaitForExist Object
 	AIUtil.FindTextBlock("Manage Cards").Click
-
+	DataTable.Value("dtCard","Global") = Card
+	
 	'===========================================================================================
 	'BP:  Set your preferences and choose OK.
 	'===========================================================================================
-	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).SetState "On"
-	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).CheckState "On"
+'	If AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).Exist(2) = False Then
+'		AIUtil.ScrollOnObject AIUtil("toggle_button", micAnyText, micFromTop, 1), "down", 2
+'	End If
+'	
+'	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).SetState "On"
+'	If AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).Exist(2) = False Then
+'		AIUtil.ScrollOnObject AIUtil("toggle_button", micAnyText, micFromTop, 1), "down", 2
+'	End If
+'	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindTextBlock(Card)).CheckState "On"
+	Browser("Home").Page("Home").SAPUIButton("Card Switch").Click
 	'For i = 1 To 8 Step 1
 	'	AIUtil("toggle_button", micAnyText, micFromTop,i).SetState "On"
 	'	AIUtil("toggle_button", micAnyText, micFromTop,i).CheckState "On"
@@ -76,20 +89,26 @@ Function DeselectCard (Card)
 	'===========================================================================================
 	'BP:  To customize the cards on the overview page, choose the User Icon and choose Manage Cards.
 	'===========================================================================================
+	Set Object = AIUtil("profile")
+	AIWaitForExist Object
 	AIUtil("profile").Click
+	Set Object = AIUtil.FindTextBlock("Manage Cards")
+	AIWaitForExist Object
 	AIUtil.FindTextBlock("Manage Cards").Click
 
 	'===========================================================================================
 	'BP:  Set your preferences and choose OK.
 	'===========================================================================================
 	'AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindText(Card)).SetState "Off"
-	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindText(Card, micFromRight, 1)).SetState "Off"	
-	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindText(Card, micFromRight, 1)).CheckState "Off"
+	DataTable.Value("dtCard","Global") = Card
+'	Browser("Home").Page("Home").SAPUIButton("Card Switch").Click
+	AIUtil("toggle_button", micAnyText, micFromTop, 1).SetState "Off"	
+'	AIUtil("toggle_button", micAnyText, micWithAnchorOnLeft, AIUtil.FindText(Card, micFromTop, 1)).CheckState "Off"
 	AIUtil("button", "OK").Click
 	
 End Function
 
-Dim BrowserExecutable, rc, oShell
+Dim BrowserExecutable, rc, oShell, counter
 
 Set oShell = CreateObject ("WSCript.shell")
 oShell.run "powershell -command ""Start-Service mediaserver"""
@@ -169,8 +188,16 @@ AIUtil("search").Click
 '===========================================================================================
 Set Object = AIUtil.FindText("General Ledger Overview")
 AIWaitForExist Object
-If AIUtil.FindText("Filtered By").Exist(0) Then
-	AIUtil("down_triangle", micAnyText, micFromTop, 3).Click
+If  (AIUtil("button", "Go").Exist(10) = False) Then
+	counter = 1
+	Do
+		AIUtil("down_triangle", micAnyText, micFromTop, 3).Click
+		counter = counter + 1
+		If counter > 15 Then
+			Reporter.ReportEvent micFail, "Click Down Triangle", "Go didn't show up within " & counter & " attempts."
+			Exit Do
+		End If
+		Loop Until AIUtil("button", "Go").Exist(0)
 End If
 
 'AIUtil("text_box", "Display Currency: *").Type "USD"
@@ -202,7 +229,7 @@ DeselectCard "Journal Entries to Be Verified"
 '		Choose the header (or line point) of the card to get further information.
 '===========================================================================================
 SelectCard "G/L Account Balance"
-AIUtil.FindText("G/L Account Balance").Click
+AIUtil.FindText("Account Balance").Click
 AIUtil.FindText("Balance Sheet/Income Statement").CheckExists True
 
 '===========================================================================================
@@ -236,8 +263,9 @@ DeselectCard "Quick Links"
 '===========================================================================================
 SelectCard "Tax Reconciliation Account Balance"
 AIUtil.FindTextBlock("Tax Reconciliation Account Balance").Click
-AIUtil.FindTextBlock("Tax Reconciliation Account Balance").CheckExists True
+AIUtil.FindTextBlock("Account Balances for Journal Entries with Tax Codes").CheckExists True
 AIUtil("left_triangle").Click
+AIUtil("button", "Go").CheckExists True
 DeselectCard "Tax Reconciliation Account Balance"
 
 '===========================================================================================
@@ -245,7 +273,7 @@ DeselectCard "Tax Reconciliation Account Balance"
 '		Choose the header (or line point) of the card to get further information.
 '===========================================================================================
 SelectCard "G/L Item Changes"
-AIUtil.FindTextBlock("GIL Item Changes").Click
+AIUtil.FindText("Item Changes").Click
 AIUtil.FindText("Audit Journal").CheckExists True
 AIUtil("left_triangle").Click
 DeselectCard "G/L Item Changes"
@@ -254,24 +282,30 @@ DeselectCard "G/L Item Changes"
 'BP:  Navigate to Days Payable Outstanding Indirect.
 '		Choose the header (or each item) of the card to get further information.
 '===========================================================================================
-AIUtil.FindTextBlock("Indirect").Click
+SelectCard "Days Payable Outstanding Indirect"
+AIUtil.FindText("Days Payable Outstanding").Click
+Set Object = AIUtil.FindText("Days Payable Outstanding - Indirect")
+AIWaitForExist Object
 AIUtil.FindText("Days Payable Outstanding - Indirect").CheckExists True
 AIUtil("left_triangle").Click
+DeselectCard "Days Payable Outstanding Indirect"
 
 '===========================================================================================
 'BP:  Navigate to Days Sales Outstanding.
 '		Choose the header (or each item) of the card to get further information.
 '===========================================================================================
+SelectCard "Days Sales Outstanding"
 AIUtil.FindTextBlock("Days Sales Outstanding").Click
 AIUtil.FindTextBlock("Days Sales Outstanding", micFromTop, 1).CheckExists True
 AIUtil("left_triangle").Click
+DeselectCard "Days Sales Outstanding"
 
 '===========================================================================================
 'BP:  Logout
 '===========================================================================================
 AIUtil("profile").Click
 AIUtil.FindTextBlock("Sign Out").Click
-AIUtil.FindTextBlock("0K").Click
+AIUtil.FindTextBlock("OK").Click
 Set Object = AIUtil("text_box", "User")
 AIWaitForExist Object
 
